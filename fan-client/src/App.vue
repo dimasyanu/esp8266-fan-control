@@ -27,6 +27,28 @@ export default {
     checkActive(i) {
       return this.speed !== this.reqSpeed ? i - 1 === this.reqSpeed : i - 1 === this.reqSpeed
     },
+    checkSpeed() {
+      this.loading = true
+      axios.get(this.baseUrl + '/')
+        .then(res => {
+          if (typeof res.data.speed === 'string') {
+            this.speed = parseInt(res.data.speed)
+            return
+          }
+          this.speed = res.data.speed
+        })
+        .catch(err => {
+          console.log(err)
+        })
+        .finally(() => {
+          this.loading = false
+          this.reqSpeed = this.speed
+
+          setTimeout(function() {
+            this.ctx.checkSpeed()
+          }.bind({ ctx: this }), 5000)
+        })
+    },
     changeSpeed(reqSpeed) {
       if (this.loading) return
 
@@ -57,22 +79,7 @@ export default {
     }
   },
   mounted() {
-    this.loading = true
-    axios.get(this.baseUrl + '/')
-      .then(res => {
-        if (typeof res.data.speed === 'string') {
-          this.speed = parseInt(res.data.speed)
-          return
-        }
-        this.speed = res.data.speed
-      })
-      .catch(err => {
-        console.log(err)
-      })
-      .finally(() => {
-        this.loading = false
-          this.reqSpeed = this.speed
-      })
+    this.checkSpeed()
   }
 }
 </script>
