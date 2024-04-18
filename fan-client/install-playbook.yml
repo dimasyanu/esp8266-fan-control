@@ -1,0 +1,40 @@
+---
+
+- name: Install client
+  hosts: localhost
+  pre_tasks:
+    - pause:
+        prompt: "1. Windows (C:\\inetpub\\wwwroot\\fan)\n2. Mac (/usr/local/var/www/fan)\n3. Linux (/var/www/fan)\nSelect your machine"
+      register: prompt
+      run_once: yes
+    - set_fact:
+        machine: "{{prompt.user_input}}"
+      no_log: yes
+      run_once: yes
+  tasks:
+    - name: Install node modules
+      community.general.yarn:
+        path: .
+        state: latest
+
+    - name: Get the .env status
+      stat: path=./.env
+      register: env_file
+
+    - name: Check for the .env file.
+      fail: msg="Configuration file (.env) is not found."
+      when: env_file.stat.exists == False
+
+    - name: Remove previous build
+      shell: rm -rf ./dist
+
+    - name: Build the client
+      shell: yarn build --mode production
+
+    - name: Deploy for Mac
+      shell: rm -rf /usr/local/var/www/fan && cp -R ./dist /usr/local/var/www/fan
+      when: machine == "2"
+
+    - name: Deploy for Linux
+      shell: cp -R ./dist /var/www/fan
+      when: machine == "3"

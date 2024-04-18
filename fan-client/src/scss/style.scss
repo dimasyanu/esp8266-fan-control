@@ -59,10 +59,12 @@ ul {
 
     span {
         vertical-align: middle;
-        &.icon > svg {
-            width: 32px;
-            color: #333;
-        }
+    }
+
+    div.icon > svg {
+        vertical-align: middle;
+        width: 32px;
+        color: #333;
     }
 }
 
