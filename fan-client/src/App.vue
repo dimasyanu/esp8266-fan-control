@@ -33,7 +33,7 @@ export default {
       return this.speed !== this.reqSpeed ? i - 1 === this.reqSpeed : i - 1 === this.reqSpeed
     },
     checkSpeed() {
-      axios.get(this.baseUrl + '/')
+      axios.get(this.baseUrl + '/speed')
         .then(res => {
           if (typeof res.data.speed === 'string') {
             this.speed = parseInt(res.data.speed)
@@ -63,7 +63,7 @@ export default {
       }
       
       this.loading = true
-      axios.post(this.baseUrl + '/', data, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
+      axios.post(this.baseUrl + '/speed', data, { headers: { 'content-type': 'application/x-www-form-urlencoded' } })
         .then(res => {
           if (typeof res.data.speed === 'string') {
             this.speed = parseInt(res.data.speed)

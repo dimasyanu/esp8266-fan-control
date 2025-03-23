@@ -1,5 +1,4 @@
 #include <WiFiClient.h>
-#include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 #include <Controller.h>
 
@@ -7,6 +6,7 @@
 #define PASS "Wkwkwkwk"
 
 Controller *controller;
+ESP8266WebServer server(80);
 
 IPAddress staticIP(192,168,18,36);
 IPAddress gatewayIP(192,168,18,1);
@@ -55,6 +55,8 @@ void setup() {
 // Main code, run repeatedly:
 void loop() {
   (*controller).listen();
+  // server.handleClient();
   MDNS.update();
+  digitalWrite(LED_BUILTIN, HIGH);
   delay(300);
 }
