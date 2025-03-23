@@ -60,13 +60,32 @@ void Controller::success(char speed) {
 /// @param speed 
 /// @return Speed of the fan after changed
 char Controller::changeSpeed(int speed) {
-    for (int i = 0; i < speed; i++) {
-        digitalWrite(LED_BUILTIN, HIGH);
-        delay(300);
-        digitalWrite(LED_BUILTIN, LOW);
+    digitalWrite(LED_BUILTIN, LOW);
+
+    digitalWrite(D5, LOW);
+    digitalWrite(D6, LOW);
+    digitalWrite(D7, LOW);
+
+    delay(switchDelay);
+
+    switch(speed) {
+    case '1':
+        digitalWrite(D5, HIGH);
+        break;
+    case '2':
+        digitalWrite(D5, HIGH);
+        digitalWrite(D6, HIGH);
+        break;
+    case '3':
+        digitalWrite(D7, HIGH);
+        break;
+    default:
+        break;
     }
 
-    return speed + '0';
+    this->fanSpeed = speed + '0';
+    Serial.printf("Current speed: %i\n", this->fanSpeed);
+    return this->fanSpeed;
 }
 
 /// @brief Handle get speed request

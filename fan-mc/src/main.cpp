@@ -15,6 +15,9 @@ IPAddress subnetMask(255,255,255,0);
 // Setup code, run once:
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(D5, OUTPUT);
+  pinMode(D6, OUTPUT);
+  pinMode(D7, OUTPUT);
   Serial.begin(115200);
 
   delay(5000);
